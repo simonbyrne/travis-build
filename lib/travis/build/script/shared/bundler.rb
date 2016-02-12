@@ -28,7 +28,7 @@ module Travis
             sh.if gemfile_lock? do
               if data.cache?(:bundler)
                 sh.fold 'cache.bundler' do
-                  directory_cache.add(bundler_path(false))
+                  directory_cache.add(bundler_path(false).tap {|x| sh.echo "bundler_path: #{x}"})
                 end
               end
               sh.cmd bundler_install("--deployment"), fold: "install.bundler", retry: true
@@ -38,7 +38,7 @@ module Travis
               if data.cache?(:bundler, false)
                 sh.fold 'cache.bundler' do
                   sh.echo ''
-                  directory_cache.add(bundler_path(false))
+                  directory_cache.add(bundler_path(false).tap {|x| sh.echo "bundler_path: #{x}"})
                 end
               end
               sh.cmd bundler_install, fold: "install.bundler", retry: true
